@@ -29,6 +29,7 @@ class TestBurger:
 
         # создаем экземпляр (объект) класса Burger
         burger = Burger()
+        # добавляем 2 соуса
         burger.add_ingredient(mock_sauce)
         burger.add_ingredient(mock_sauce)
 
@@ -41,16 +42,17 @@ class TestBurger:
         mock_filling.type = 'filling'
         mock_filling.name = 'cheese'
         mock_filling.price = 50.5
-        mock_filling.get_type.return_value = 'filling'
-        mock_filling.get_name.return_value = 'cheese'
-        mock_filling.get_price.return_value = 50.5
+        mock_filling.get_type.return_value = mock_filling.type
+        mock_filling.get_name.return_value = mock_filling.name
+        mock_filling.get_price.return_value = mock_filling.price
 
         # создаем экземпляр (объект) класса Burger
         burger = Burger()
+        # добавляем 3 начинки
         burger.add_ingredient(mock_filling)
         burger.add_ingredient(mock_filling)
         burger.add_ingredient(mock_filling)
 
         assert len(burger.ingredients) == 3
-        assert burger.ingredients[0].type == 'filling'
+        assert burger.ingredients[0].name == 'cheese'
         assert burger.ingredients[2].type == 'filling'
