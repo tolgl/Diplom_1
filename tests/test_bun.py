@@ -4,24 +4,17 @@ from bun import Bun
 
 
 class TestBun:
-    @pytest.mark.parametrize('name,price',
-                             [
-                                 ['Test', 300],
-                                 ['', 300]
-                             ])
-    def test_get_name(self, name, price):
+    @pytest.mark.parametrize('name', ['', 'test', '!@#$%^&*', None])
+    def test_get_name(self, name):
+
         # создаем экземпляр (объект) класса Bun
-        bun = Bun(name=name, price=price)
+        bun = Bun(name=name, price=10)
 
         assert bun.get_name() == name
 
-    @pytest.mark.parametrize('name,price',
-                             [
-                                 ['Test', 300],
-                                 ['Test', 300.9]
-                             ])
-    def test_get_price(self, name, price):
+    @pytest.mark.parametrize('price', [10, 10.99, 0.0, None])
+    def test_get_price(self, price):
         # создаем экземпляр (объект) класса Bun
-        bun = Bun(name=name, price=price)
+        bun = Bun(name='test', price=price)
 
         assert bun.get_price() == price
