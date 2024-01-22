@@ -33,3 +33,14 @@ class TestBurger:
         assert len(burger.ingredients) == 3
         assert burger.ingredients[0].type == 'filling'
         assert burger.ingredients[2].type == 'filling'
+
+    def test_add_ingredient_with_sauce_and_filling(self, mock_sauce, mock_filling):
+        # создаем экземпляр (объект) класса Burger
+        burger = Burger()
+        # добавляем соус и начинку
+        burger.add_ingredient(mock_sauce)
+        burger.add_ingredient(mock_filling)
+
+        assert len(burger.ingredients) == 2
+        assert burger.ingredients[0].type == 'sauce'
+        assert burger.ingredients[1].type == 'filling'
