@@ -3,7 +3,7 @@ import pytest
 from bun import Bun
 
 
-class TestBooksCollector:
+class TestBun:
     @pytest.mark.parametrize('name,price',
                              [
                                  ['Test', 300],
