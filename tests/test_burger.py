@@ -70,7 +70,7 @@ class TestBurger:
     def test_remove_ingredient_removing_all_ingredients(self, mock_sauce):
         # создаем экземпляр (объект) класса Burger
         burger = Burger()
-        # добавляем 2 соуса
+        # добавляем один ингредиент
         burger.add_ingredient(mock_sauce)
         # удаляем ингредиент
         burger.remove_ingredient(0)
