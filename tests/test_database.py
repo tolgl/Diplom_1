@@ -29,7 +29,7 @@ class TestDatabase:
         database = Database()
         buns = database.available_buns()
 
-        assert buns[index].get_name() == price
+        assert buns[index].get_price() == price
 
     @pytest.mark.parametrize('index,ingredient_type',
                              [
