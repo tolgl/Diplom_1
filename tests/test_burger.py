@@ -1,6 +1,5 @@
 import pytest
 from burger import Burger
-from unittest.mock import Mock
 
 
 class TestBurger:
@@ -122,57 +121,33 @@ class TestBurger:
         assert burger.ingredients[0].type == 'sauce'
         assert burger.ingredients[1].type == 'filling'
 
-    def test_get_price_with_bun_sauce_filling(self):
-        # создаем моки для булок и ингредиентов
-        mock_bun = Mock()
-        mock_sauce = Mock()
-        mock_filling = Mock()
-        # присваиваем возвращаемое значение для метода get_price()
-        mock_bun.get_price.return_value = 50
-        mock_sauce.get_price.return_value = 10
-        mock_filling.get_price.return_value = 50.5
-        # создаем бургер и добавляем в него булки и ингредиенты
+    def test_get_price_with_bun_sauce_filling(self, mock_bun, mock_sauce, mock_filling):
         burger = Burger()
+        # добавляем булки и ингредиенты
         burger.set_buns(mock_bun)
         burger.add_ingredient(mock_sauce)
         burger.add_ingredient(mock_filling)
 
         assert burger.get_price() == 160.5
 
-    def test_get_price_without_ingredients(self):
-        # создаем моки для булок
-        mock_bun = Mock()
-        # присваиваем возвращаемое значение для метода get_price()
-        mock_bun.get_price.return_value = 50
-        # создаем бургер и добавляем в него только булки
+    def test_get_price_without_ingredients(self, mock_bun):
         burger = Burger()
+        # добавляем только булки
         burger.set_buns(mock_bun)
 
         assert burger.get_price() == 100
 
-    def test_get_price_without_buns(self):
-        # создаем моки для ингредиентов
-        mock_sauce = Mock()
-        mock_filling = Mock()
-        # присваиваем возвращаемое значение для метода get_price()
-        mock_sauce.get_price.return_value = 10
-        mock_filling.get_price.return_value = 50.5
-        # создаем бургер и добавляем в него только ингредиенты
+    def test_get_price_without_buns(self, mock_sauce, mock_filling):
         burger = Burger()
+        # добавляем только ингредиенты
         burger.add_ingredient(mock_sauce)
         burger.add_ingredient(mock_filling)
 
         assert burger.get_price() == 60.5
 
-    def test_get_price_without_one_ingredient(self):
-        # создаем моки для булок и одного ингредиента
-        mock_bun = Mock()
-        mock_filling = Mock()
-        # присваиваем возвращаемое значение для метода get_price()
-        mock_bun.get_price.return_value = 50
-        mock_filling.get_price.return_value = 50.5
-        # создаем бургер и добавляем в него булки и один ингредиент
+    def test_get_price_without_one_ingredient(self, mock_bun, mock_filling):
         burger = Burger()
+        # добавляем булки и один ингредиент
         burger.set_buns(mock_bun)
         burger.add_ingredient(mock_filling)
 
@@ -183,3 +158,52 @@ class TestBurger:
 
         # проверяем что цена без булок и ингредиентов 0
         assert burger.get_price() == 0
+
+    def test_get_receipt_with_buns_sauce_filling(self, mock_bun, mock_sauce, mock_filling):
+        # создаем бургер с полным списком продуктов
+        burger = Burger()
+        burger.set_buns(mock_bun)
+        burger.add_ingredient(mock_sauce)
+        burger.add_ingredient(mock_filling)
+        # получаем рецепт
+        receipt = burger.get_receipt()
+        # проверяем что в рецепте указаны названия всех ингредиентов
+        assert 'white bun' in receipt
+        assert 'chili sauce' in receipt
+        assert 'cutlet' in receipt
+        assert '160.5' in receipt
+
+    def test_get_receipt_without_one_ingredient(self, mock_bun, mock_sauce):
+        # создаем бургер без одного ингредиента
+        burger = Burger()
+        burger.set_buns(mock_bun)
+        burger.add_ingredient(mock_sauce)
+        # получаем рецепт
+        receipt = burger.get_receipt()
+        # проверяем что в рецепте указаны названия всех ингредиентов
+        assert 'white bun' in receipt
+        assert 'chili sauce' in receipt
+        assert 'cutlet' not in receipt
+        assert '110' in receipt
+
+    def test_get_receipt_without_buns(self, mock_sauce, mock_filling):
+        # создаем бургер без одного ингредиента
+        burger = Burger()
+        burger.add_ingredient(mock_sauce)
+        burger.add_ingredient(mock_filling)
+        # получаем рецепт
+        receipt = burger.get_receipt()
+        # проверяем что в рецепте указаны названия всех ингредиентов
+        assert 'white bun' not in receipt
+        assert 'chili sauce' in receipt
+        assert 'cutlet' not in receipt
+        assert '60.5' in receipt
+
+    def test_get_receipt_without_buns_and_ingredients(self):
+        # создаем пустой бургер
+        burger = Burger()
+        # получаем рецепт
+        receipt = burger.get_receipt()
+        # проверяем что в рецепте указаны названия всех ингредиентов
+        assert len(receipt) == 0
+        
