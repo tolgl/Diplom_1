@@ -1,6 +1,6 @@
 import pytest
-
 from burger import Burger
+from unittest.mock import Mock
 
 
 class TestBurger:
@@ -121,3 +121,65 @@ class TestBurger:
         # проверяем что ингредиенты не поменялись местами
         assert burger.ingredients[0].type == 'sauce'
         assert burger.ingredients[1].type == 'filling'
+
+    def test_get_price_with_bun_sauce_filling(self):
+        # создаем моки для булок и ингредиентов
+        mock_bun = Mock()
+        mock_sauce = Mock()
+        mock_filling = Mock()
+        # присваиваем возвращаемое значение для метода get_price()
+        mock_bun.get_price.return_value = 50
+        mock_sauce.get_price.return_value = 10
+        mock_filling.get_price.return_value = 50.5
+        # создаем бургер и добавляем в него булки и ингредиенты
+        burger = Burger()
+        burger.set_buns(mock_bun)
+        burger.add_ingredient(mock_sauce)
+        burger.add_ingredient(mock_filling)
+
+        assert burger.get_price() == 160.5
+
+    def test_get_price_without_ingredients(self):
+        # создаем моки для булок
+        mock_bun = Mock()
+        # присваиваем возвращаемое значение для метода get_price()
+        mock_bun.get_price.return_value = 50
+        # создаем бургер и добавляем в него только булки
+        burger = Burger()
+        burger.set_buns(mock_bun)
+
+        assert burger.get_price() == 100
+
+    def test_get_price_without_buns(self):
+        # создаем моки для ингредиентов
+        mock_sauce = Mock()
+        mock_filling = Mock()
+        # присваиваем возвращаемое значение для метода get_price()
+        mock_sauce.get_price.return_value = 10
+        mock_filling.get_price.return_value = 50.5
+        # создаем бургер и добавляем в него только ингредиенты
+        burger = Burger()
+        burger.add_ingredient(mock_sauce)
+        burger.add_ingredient(mock_filling)
+
+        assert burger.get_price() == 60.5
+
+    def test_get_price_without_one_ingredient(self):
+        # создаем моки для булок и одного ингредиента
+        mock_bun = Mock()
+        mock_filling = Mock()
+        # присваиваем возвращаемое значение для метода get_price()
+        mock_bun.get_price.return_value = 50
+        mock_filling.get_price.return_value = 50.5
+        # создаем бургер и добавляем в него булки и один ингредиент
+        burger = Burger()
+        burger.set_buns(mock_bun)
+        burger.add_ingredient(mock_filling)
+
+        assert burger.get_price() == 150.5
+
+    def test_get_price_without_buns_and_ingredients(self):
+        burger = Burger()
+
+        # проверяем что цена без булок и ингредиентов 0
+        assert burger.get_price() == 0
